@@ -25,7 +25,9 @@ public class ProductEntity {
 
     private String title;
 
-    private String description;
+    private String descriptionIt;
+
+    private String descriptionEn;
 
     @Enumerated(EnumType.STRING)
     private ProductCategory productCategory;

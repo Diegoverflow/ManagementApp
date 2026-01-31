@@ -54,7 +54,8 @@ public class ProductServiceImpl implements ProductService {
         return repository.findById(id).map(
                 existingProduct ->{
                     Optional.ofNullable(product.getProductCategory()).ifPresent(existingProduct::setProductCategory);
-                    Optional.ofNullable(product.getDescription()).ifPresent(existingProduct::setDescription);
+                    Optional.ofNullable(product.getDescriptionIt()).ifPresent(existingProduct::setDescriptionIt);
+                    Optional.ofNullable(product.getDescriptionEn()).ifPresent(existingProduct::setDescriptionEn);
                     Optional.ofNullable(product.getTitle()).ifPresent(existingProduct::setTitle);
                     Optional.ofNullable(product.getPrice()).ifPresent(existingProduct::setPrice);
                     Optional.ofNullable(product.getInStock()).ifPresent(existingProduct::setInStock);

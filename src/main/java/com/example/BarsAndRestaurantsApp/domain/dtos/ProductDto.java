@@ -18,7 +18,9 @@ public class ProductDto {
 
     private String title;
 
-    private String description;
+    private String descriptionIt;
+
+    private String descriptionEn;
 
     private ProductCategory productCategory;
 
