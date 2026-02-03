@@ -48,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
         return repository.existsById(id);
     }
 
-    @Override
+    @Override //
     public ProductEntity partialUpdate(UUID id, ProductEntity product) {
         product.setId(id);
         return repository.findById(id).map(

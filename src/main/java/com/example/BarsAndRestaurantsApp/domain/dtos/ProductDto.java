@@ -18,7 +18,7 @@ public class ProductDto {
 
     private String titleIt;
 
-    private String titleEn;
+    private String titleEn; //
 
     private String descriptionIt;
 

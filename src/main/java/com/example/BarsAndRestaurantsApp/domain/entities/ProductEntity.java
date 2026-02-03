@@ -25,7 +25,7 @@ public class ProductEntity {
 
     private String titleIt;
 
-    private String titleEn;
+    private String titleEn;//
 
     private String descriptionIt;
 
