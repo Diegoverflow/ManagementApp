@@ -23,11 +23,17 @@ public class ProductEntity {
     @UuidGenerator
     private UUID id;
 
-    private String title;
+    private String titleIt;
+
+    private String titleEn;
 
     private String descriptionIt;
 
     private String descriptionEn;
+
+    private String IngredientsIt;
+
+    private String IngredientsEn;
 
     @Enumerated(EnumType.STRING)
     private ProductCategory productCategory;

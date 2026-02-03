@@ -56,7 +56,10 @@ public class ProductServiceImpl implements ProductService {
                     Optional.ofNullable(product.getProductCategory()).ifPresent(existingProduct::setProductCategory);
                     Optional.ofNullable(product.getDescriptionIt()).ifPresent(existingProduct::setDescriptionIt);
                     Optional.ofNullable(product.getDescriptionEn()).ifPresent(existingProduct::setDescriptionEn);
-                    Optional.ofNullable(product.getTitle()).ifPresent(existingProduct::setTitle);
+                    Optional.ofNullable(product.getIngredientsIt()).ifPresent(existingProduct::setIngredientsIt);
+                    Optional.ofNullable(product.getIngredientsEn()).ifPresent(existingProduct::setIngredientsEn);
+                    Optional.ofNullable(product.getTitleIt()).ifPresent(existingProduct::setTitleIt);
+                    Optional.ofNullable(product.getTitleEn()).ifPresent(existingProduct::setTitleEn);
                     Optional.ofNullable(product.getPrice()).ifPresent(existingProduct::setPrice);
                     Optional.ofNullable(product.getInStock()).ifPresent(existingProduct::setInStock);
                     Optional.ofNullable(product.getImageName()).ifPresent(existingProduct::setImageName);

@@ -16,11 +16,17 @@ public class ProductDto {
 
     private UUID id;
 
-    private String title;
+    private String titleIt;
+
+    private String titleEn;
 
     private String descriptionIt;
 
     private String descriptionEn;
+
+    private String ingredientsIt;
+
+    private String ingredientsEn;
 
     private ProductCategory productCategory;
 
