@@ -10,9 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Consumer;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -31,6 +30,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Page<ProductEntity> findByProductCategory(Pageable pageable, ProductCategory category) {
         return repository.findByProductCategory(pageable, category);
+    }
+
+    @Override
+    public List<ProductCategory> findUploadedCategories() {
+        return repository.findDistinctProductCategories();
     }
 
     @Override
@@ -60,6 +64,8 @@ public class ProductServiceImpl implements ProductService {
                     Optional.ofNullable(product.getIngredientsEn()).ifPresent(existingProduct::setIngredientsEn);
                     Optional.ofNullable(product.getTitleIt()).ifPresent(existingProduct::setTitleIt);
                     Optional.ofNullable(product.getTitleEn()).ifPresent(existingProduct::setTitleEn);
+                    Optional.ofNullable(product.getAllergens()).ifPresent(existingProduct::setAllergens);
+                    Optional.ofNullable(product.getVeganOk()).ifPresent(existingProduct::setVeganOk);
                     Optional.ofNullable(product.getPrice()).ifPresent(existingProduct::setPrice);
                     Optional.ofNullable(product.getInStock()).ifPresent(existingProduct::setInStock);
                     Optional.ofNullable(product.getImageName()).ifPresent(existingProduct::setImageName);

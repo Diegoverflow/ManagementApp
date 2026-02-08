@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -83,6 +84,11 @@ public class ProductController {
                                         service.findAll(pageable)
                                         : service.findByProductCategory(pageable, category);
         return products.map(mapper::mapTo);
+    }
+
+    @GetMapping(path = "/products/categories")
+    public List<ProductCategory> listUploadedCategories(){
+        return service.findUploadedCategories();
     }
 
     @GetMapping(path = "/products/{uuid}")

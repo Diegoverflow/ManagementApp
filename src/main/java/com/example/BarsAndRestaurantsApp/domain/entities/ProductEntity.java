@@ -1,5 +1,6 @@
 package com.example.BarsAndRestaurantsApp.domain.entities;
 
+import com.example.BarsAndRestaurantsApp.domain.entities.entitiesEnums.Allergen;
 import com.example.BarsAndRestaurantsApp.domain.entities.entitiesEnums.ProductCategory;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -37,6 +38,17 @@ public class ProductEntity {
 
     @Enumerated(EnumType.STRING)
     private ProductCategory productCategory;
+
+    @ElementCollection(targetClass = Allergen.class)
+    @CollectionTable(
+            name = "allergens",
+            joinColumns = @JoinColumn(name = "product_id")
+    )
+    @Enumerated(EnumType.STRING)
+    @Column(name = "allergen")
+    private Set<Allergen> allergens = new HashSet<>();
+
+    private Boolean veganOk;
 
     private Float price;
 
