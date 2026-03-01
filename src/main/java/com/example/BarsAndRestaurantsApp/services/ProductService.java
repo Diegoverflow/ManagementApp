@@ -1,5 +1,8 @@
 package com.example.BarsAndRestaurantsApp.services;
 
+import com.example.BarsAndRestaurantsApp.domain.CreateProductRequest;
+import com.example.BarsAndRestaurantsApp.domain.UpdateProductRequest;
+import com.example.BarsAndRestaurantsApp.domain.dtos.ProductDto;
 import com.example.BarsAndRestaurantsApp.domain.entities.ProductEntity;
 import com.example.BarsAndRestaurantsApp.domain.entities.entitiesEnums.ProductCategory;
 import org.springframework.data.domain.Page;
@@ -11,7 +14,9 @@ import java.util.UUID;
 
 public interface ProductService {
 
-    ProductEntity save(ProductEntity product);
+    ProductEntity update(UUID uuid, UpdateProductRequest product);
+
+    ProductEntity createProduct(CreateProductRequest createProductRequestDto);
 
     Page<ProductEntity> findAll(Pageable pageable);
 
@@ -19,11 +24,11 @@ public interface ProductService {
 
     List<ProductCategory> findUploadedCategories();
 
-    Optional<ProductEntity> findOne(UUID id);
+    ProductEntity findOne(UUID id);
 
     boolean exits(UUID id);
 
-    ProductEntity partialUpdate(UUID id, ProductEntity product);
+    ProductEntity partialUpdate(UUID id, ProductDto product);
 
     void delete(UUID id);
 

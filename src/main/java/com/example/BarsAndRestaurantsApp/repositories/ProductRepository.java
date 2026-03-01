@@ -23,4 +23,9 @@ public interface ProductRepository extends CrudRepository<ProductEntity, UUID>,
         from ProductEntity p
     """)
     List<ProductCategory> findDistinctProductCategories();
+
+    boolean existsByTitleItIgnoreCase(String titleIt);
+    boolean existsByTitleEnIgnoreCase(String titleEn);
+    boolean existsByTitleItIgnoreCaseAndIdNot(String titleIt, UUID id);
+    boolean existsByTitleEnIgnoreCaseAndIdNot(String titleEn, UUID id);
 }

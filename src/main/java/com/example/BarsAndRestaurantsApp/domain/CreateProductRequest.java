@@ -1,4 +1,4 @@
-package com.example.BarsAndRestaurantsApp.domain.dtos;
+package com.example.BarsAndRestaurantsApp.domain;
 
 import com.example.BarsAndRestaurantsApp.domain.entities.entitiesEnums.Allergen;
 import com.example.BarsAndRestaurantsApp.domain.entities.entitiesEnums.ProductCategory;
@@ -9,15 +9,12 @@ import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductDto {
-
-    private UUID id;
+public class CreateProductRequest {
 
     private String titleIt;
 
@@ -33,7 +30,8 @@ public class ProductDto {
 
     private ProductCategory productCategory;
 
-    private Set<Allergen> allergens = null;
+    @Builder.Default
+    private Set<Allergen> allergens = new HashSet<>();
 
     private Boolean veganOk;
 

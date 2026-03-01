@@ -1,4 +1,4 @@
-package com.example.BarsAndRestaurantsApp.domain.dtos;
+package com.example.BarsAndRestaurantsApp.domain;
 
 import com.example.BarsAndRestaurantsApp.domain.entities.entitiesEnums.Allergen;
 import com.example.BarsAndRestaurantsApp.domain.entities.entitiesEnums.ProductCategory;
@@ -15,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductDto {
+public class UpdateProductRequest {
 
     private UUID id;
 
@@ -33,7 +33,8 @@ public class ProductDto {
 
     private ProductCategory productCategory;
 
-    private Set<Allergen> allergens = null;
+    @Builder.Default
+    private Set<Allergen> allergens = new HashSet<>();
 
     private Boolean veganOk;
 

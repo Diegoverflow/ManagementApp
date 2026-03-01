@@ -3,15 +3,13 @@ package com.example.BarsAndRestaurantsApp.domain.entities;
 import com.example.BarsAndRestaurantsApp.domain.entities.entitiesEnums.Allergen;
 import com.example.BarsAndRestaurantsApp.domain.entities.entitiesEnums.ProductCategory;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -24,17 +22,23 @@ public class ProductEntity {
     @UuidGenerator
     private UUID id;
 
+    @Column(nullable = false, unique = true)
     private String titleIt;
 
+    @Column(unique = true)
     private String titleEn;//
 
+    @Column
     private String descriptionIt;
 
+    @Column
     private String descriptionEn;
 
-    private String IngredientsIt;
+    @Column
+    private String ingredientsIt;
 
-    private String IngredientsEn;
+    @Column
+    private String ingredientsEn;
 
     @Enumerated(EnumType.STRING)
     private ProductCategory productCategory;
@@ -48,13 +52,26 @@ public class ProductEntity {
     @Column(name = "allergen")
     private Set<Allergen> allergens = new HashSet<>();
 
-    private Boolean veganOk;
+    @Column
+    private Boolean veganOk = false;
 
+    @Column(nullable = false)
     private Float price;
 
     private Integer inStock;
 
+    @Column(nullable = false)
     private String imageName;
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductEntity that = (ProductEntity) o;
+        return Objects.equals(id, that.id);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

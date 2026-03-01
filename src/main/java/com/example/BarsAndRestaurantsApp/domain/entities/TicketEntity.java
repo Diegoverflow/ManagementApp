@@ -1,16 +1,15 @@
 package com.example.BarsAndRestaurantsApp.domain.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -23,17 +22,29 @@ public class TicketEntity {
     @UuidGenerator
     private UUID id;
 
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     private LocalDateTime date;
 
-    private boolean open;
+    @Column(nullable = false)
+    private boolean open = true;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bar_restaurant_table_id", nullable = false)
     private BarRestaurantTableEntity ticketTable;
 
-    @OneToMany(fetch = FetchType.EAGER,
-                cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CustomerOrderEntity> orders = new HashSet<>();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TicketEntity)) return false;
+        return id != null && id.equals(((TicketEntity) o).id);
+    }
 
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
