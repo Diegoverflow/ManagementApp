@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public interface ProductService {
@@ -26,7 +25,7 @@ public interface ProductService {
 
     ProductEntity findOne(UUID id);
 
-    boolean exits(UUID id);
+    boolean exists(UUID id);
 
     ProductEntity partialUpdate(UUID id, ProductDto product);
 

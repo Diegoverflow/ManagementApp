@@ -1,8 +1,10 @@
 package com.example.BarsAndRestaurantsApp.controllers;
 
-import com.example.BarsAndRestaurantsApp.domain.entities.ProductEntity;
+import com.example.BarsAndRestaurantsApp.domain.dtos.ProductDto;
+import com.example.BarsAndRestaurantsApp.errors.ResourceNotFoundException;
 import com.example.BarsAndRestaurantsApp.services.ProductImageService;
 import com.example.BarsAndRestaurantsApp.services.ProductService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.CacheControl;
 import org.springframework.http.MediaType;
@@ -20,54 +22,53 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @RestController
+@RequiredArgsConstructor
+@RequestMapping("/product-images")
 public class ProductImageController {
 
-    private ProductImageService imageService;
-    private ProductService productService;
+    private final ProductImageService imageService;
+    private final ProductService productService;
 
-    public ProductImageController(ProductImageService imageService,
-                                  ProductService productService) {
-        this.imageService = imageService;
-        this.productService = productService;
-    }
-
-    @PostMapping("/product-image/upload")
-    public ResponseEntity<?> upload(
+    @PostMapping("/upload")
+    public ResponseEntity<Map<String, String>> upload(
             @RequestParam UUID id,
-            @RequestParam MultipartFile image) throws Exception {
+            @RequestParam MultipartFile image) {
+
+        if (image.isEmpty()) {
+            throw new IllegalArgumentException("Uploaded file is empty");
+        }
+
+        if (!productService.exists(id)) {
+            throw new ResourceNotFoundException("Product not found");
+        }
 
         String imageName = imageService.save(image);
 
-        ProductEntity product = productService.findOne(id)
-                .orElseThrow(() -> new RuntimeException("Product does not exist"));
-
-        product.setImageName(imageName);
-        productService.save(product);
-
-        return ResponseEntity.ok(
-                Map.of("imageName", imageName)
+        productService.partialUpdate(
+                id,
+                ProductDto.builder().imageName(imageName).build()
         );
 
+        return ResponseEntity.ok(Map.of("imageName", imageName));
     }
 
-    @GetMapping("/product-image/{imageName}")
-    public ResponseEntity<Resource> serve(@PathVariable String imageName)
-            throws IOException {
+    @GetMapping("/{imageName}")
+    public ResponseEntity<Resource> serve(@PathVariable String imageName) throws IOException {
 
         Resource image = imageService.load(imageName);
 
-        Path imagePath = Paths.get(imageService.getUploadDir()).resolve(imageName);
+        String contentType = Files.probeContentType(
+                Paths.get(imageService.getUploadDir()).resolve(imageName)
+        );
 
-        if (!Files.exists(imagePath)) {
-            throw new FileNotFoundException("Image not found");
+        if (contentType == null) {
+            contentType = "application/octet-stream";
         }
-
-        String contentType = Files.probeContentType(imagePath);
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
                 .cacheControl(CacheControl.maxAge(30, TimeUnit.DAYS))
                 .body(image);
-    }
 
+    }
 }

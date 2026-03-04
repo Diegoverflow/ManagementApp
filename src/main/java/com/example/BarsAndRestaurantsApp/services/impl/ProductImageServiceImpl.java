@@ -1,5 +1,6 @@
 package com.example.BarsAndRestaurantsApp.services.impl;
 
+import com.example.BarsAndRestaurantsApp.errors.ResourceNotFoundException;
 import com.example.BarsAndRestaurantsApp.services.ProductImageService;
 import lombok.Getter;
 import org.springframework.core.io.Resource;
@@ -24,36 +25,60 @@ public class ProductImageServiceImpl implements ProductImageService {
             "C:\\Users\\belar\\Documents\\BarsAndRestaurantsApp\\BarsAndRestaurantsApp\\src\\main\\resources\\static\\images\\products";
 
     @Override
-    public String save(MultipartFile image) throws IOException {
+    public String save(MultipartFile image) {
 
-        //sanitize
-        if (!image.getContentType().startsWith("image/")) {
-            throw new IllegalArgumentException("Invalid file type");
+        try {
+
+            //TODO: sanity check
+
+            String contentType = image.getContentType();
+            if (contentType == null || !contentType.startsWith("image/")) {
+                throw new IllegalArgumentException("Invalid file type");
+            }
+
+            String extension = StringUtils.getFilenameExtension(image.getOriginalFilename());
+            if (extension == null || extension.isBlank()) {
+                throw new IllegalArgumentException("Invalid file extension");
+            }
+
+            String imageName = UUID.randomUUID() + "." + extension;
+
+            Path dir = Paths.get(uploadDir);
+            Path imagePath = dir.resolve(imageName);
+
+            Files.createDirectories(dir);
+            Files.copy(image.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+
+            return imageName;
+
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to store image", e);
         }
-
-        String extension = StringUtils.getFilenameExtension(image.getOriginalFilename());
-        String imageName = UUID.randomUUID() + "." + extension; //"_" + file.getOriginalFilename();
-        Path dir = Paths.get(uploadDir);
-        Path imagePath = dir.resolve(imageName);
-
-        Files.createDirectories(dir);
-        Files.copy(image.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
-
-        return imageName;
     }
 
     @Override
-    public Resource load(String imageName) throws IOException {
-        Path imagePath = Paths.get(uploadDir).resolve(imageName);
-        if (!Files.exists(imagePath)) {
-            throw new FileNotFoundException("Image not found");
+    public Resource load(String imageName) {
+
+        try {
+            Path imagePath = Paths.get(uploadDir).resolve(imageName);
+            if (!Files.exists(imagePath)) {
+                throw new ResourceNotFoundException("Image not found");
+            }
+            return new UrlResource(imagePath.toUri());
+
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load image", e);
         }
-        return new UrlResource(imagePath.toUri());
+
     }
 
     @Override
-    public void delete(String imageName) throws IOException {
-        Files.deleteIfExists(Paths.get(uploadDir).resolve(imageName));
+    public void delete(String imageName) {
+        try {
+            Files.deleteIfExists(Paths.get(uploadDir).resolve(imageName));
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to delete image", e);
+        }
     }
 
 }

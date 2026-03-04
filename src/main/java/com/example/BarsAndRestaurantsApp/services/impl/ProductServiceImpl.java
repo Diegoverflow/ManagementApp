@@ -109,7 +109,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean exits(UUID id) {
+    public boolean exists(UUID id) {
         return repository.existsById(id);
     }
 

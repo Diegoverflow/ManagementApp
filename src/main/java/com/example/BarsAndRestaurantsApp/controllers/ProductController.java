@@ -92,11 +92,7 @@ public class ProductController {
     @DeleteMapping(path = "/{uuid}")
     public ResponseEntity<Void> deleteProduct(@PathVariable UUID uuid){
         ProductEntity productEntity =  service.findOne(uuid);
-        try {
-            productImageService.delete(productEntity.getImageName());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        productImageService.delete(productEntity.getImageName());
         service.delete(uuid);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

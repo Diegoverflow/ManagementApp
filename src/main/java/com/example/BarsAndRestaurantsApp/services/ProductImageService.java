@@ -7,11 +7,11 @@ import java.io.IOException;
 
 public interface ProductImageService {
 
-    String save(MultipartFile file) throws IOException;
+    String save(MultipartFile file);
 
-    Resource load(String filename) throws IOException;
+    Resource load(String filename);
 
-    void delete(String filename) throws IOException;
+    void delete(String filename);
 
     String getUploadDir();
 
