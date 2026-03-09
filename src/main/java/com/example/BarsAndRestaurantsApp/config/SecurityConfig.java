@@ -27,11 +27,13 @@ public class SecurityConfig {
         return new JwtAuthenticationFilter(authenticationService);
     }
 
+
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
 
         ApplicationUserDetailsService applicationUserDetailsService = new ApplicationUserDetailsService(userRepository);
 
+        /*
         String email = "user@test.com";
         userRepository.findByUsername(email).orElseGet(() -> {
             UserEntity newUser = UserEntity.builder()
@@ -40,9 +42,12 @@ public class SecurityConfig {
                     .build();
             return userRepository.save(newUser);
         });
+        */
 
         return applicationUserDetailsService;
     }
+
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(
