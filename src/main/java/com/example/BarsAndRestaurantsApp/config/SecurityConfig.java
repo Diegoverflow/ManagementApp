@@ -19,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.List;
+
 @Configuration
 public class SecurityConfig {
 
@@ -55,14 +57,22 @@ public class SecurityConfig {
             JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
 
         http.authorizeHttpRequests(auth -> auth
-                    .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/api/v1/posts/drafts").authenticated()
-                    .requestMatchers(HttpMethod.GET, "/api/v1/posts/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/api/v1/tags/**").permitAll()
-                    .anyRequest().authenticated()
+                        .requestMatchers(HttpMethod.OPTIONS, "/api/v1/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/product-image/**").permitAll()
+                        //.requestMatchers(HttpMethod.GET, "/api/v1/posts/**").authenticated()
+                        .anyRequest().authenticated()
             )
             .csrf(csrf -> csrf.disable())
+            .cors(cors -> cors.configurationSource(request -> {
+                var corsConf = new org.springframework.web.cors.CorsConfiguration();
+                        corsConf.setAllowedOrigins(List.of("http://localhost:4200"));
+                        corsConf.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+                        corsConf.setAllowCredentials(true);
+                        corsConf.setAllowedHeaders(List.of("*"));
+                return corsConf;
+            }))
             .sessionManagement(session ->
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
@@ -77,7 +87,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
         return config.getAuthenticationManager();
     }
 }

@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/product-images")
+@RequestMapping("/api/v1/product-image")
 public class ProductImageController {
 
     private final ProductImageService imageService;
