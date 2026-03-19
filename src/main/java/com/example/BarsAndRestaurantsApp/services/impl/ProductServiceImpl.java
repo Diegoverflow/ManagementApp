@@ -34,9 +34,10 @@ public class ProductServiceImpl implements ProductService {
         }
         existingProduct.setTitleIt(product.getTitleIt());
 
+        /*
         if(repository.existsByTitleEnIgnoreCaseAndIdNot(product.getTitleEn(), uuid)){
             throw new IllegalArgumentException("En title already exists");
-        }
+        }*/
         existingProduct.setTitleEn(product.getTitleEn());
 
         existingProduct.setDescriptionIt(product.getDescriptionIt());
@@ -64,9 +65,10 @@ public class ProductServiceImpl implements ProductService {
         }
         product.setTitleIt(createProductRequest.getTitleIt());
 
+        /*
         if(repository.existsByTitleEnIgnoreCase(createProductRequest.getTitleEn())){
             throw new IllegalArgumentException("En title already exists");
-        }
+        }*/
         product.setTitleEn(createProductRequest.getTitleEn());
 
         product.setDescriptionIt(createProductRequest.getDescriptionIt());

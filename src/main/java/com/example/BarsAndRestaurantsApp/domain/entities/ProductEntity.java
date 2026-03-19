@@ -25,7 +25,7 @@ public class ProductEntity {
     @Column(nullable = false, unique = true)
     private String titleIt;
 
-    @Column(unique = true)
+    @Column  //(unique = true)
     private String titleEn;//
 
     @Column

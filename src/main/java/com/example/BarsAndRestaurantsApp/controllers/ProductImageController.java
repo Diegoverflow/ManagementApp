@@ -31,21 +31,21 @@ public class ProductImageController {
 
     @PostMapping("/upload")
     public ResponseEntity<Map<String, String>> upload(
-            @RequestParam UUID id,
+            @RequestParam UUID productId,
             @RequestParam MultipartFile image) {
 
         if (image.isEmpty()) {
             throw new IllegalArgumentException("Uploaded file is empty");
         }
 
-        if (!productService.exists(id)) {
-            throw new ResourceNotFoundException("Product not found");
+        if (!productService.exists(productId)) {
+            throw new ResourceNotFoundException("Product not found for image upload");
         }
 
         String imageName = imageService.save(image);
 
         productService.partialUpdate(
-                id,
+                productId,
                 ProductDto.builder().imageName(imageName).build()
         );
 
